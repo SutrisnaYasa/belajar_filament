@@ -9,4 +9,10 @@ class Classroom extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+
+    protected $guarded = [];
+
+    public function subjects(){
+        return $this->belongsToMany(Subject::class)->withPivot('description');
+    }
 }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ClassroomResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ClassroomResource\RelationManagers;
+use App\Filament\Resources\ClassroomResource\RelationManagers\SubjectsRelationManager;
 
 class ClassroomResource extends Resource
 {
@@ -28,6 +29,22 @@ class ClassroomResource extends Resource
     protected static ?string $navigationGroup = 'Source';
     // Menentukan urutan atau letak menu
     protected static ?int $navigationSort = 32;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('classroom'))
+            return true;
+        else
+            return false;
+    }
+
+    // public static function canViewAny(): bool
+    // {
+    //     if(auth()->user()->can('classroom'))
+    //         return true;
+    //     else
+    //         return false;
+    // }
 
     public static function form(Form $form): Form
     {
@@ -60,7 +77,7 @@ class ClassroomResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SubjectsRelationManager::class
         ];
     }
 
