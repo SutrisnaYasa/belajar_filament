@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use Filament\Pages;
 use Filament\Panel;
+use App\Models\Team;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
@@ -18,6 +19,7 @@ use Filament\Navigation\NavigationBuilder;
 use App\Filament\Resources\PeriodeResource;
 use App\Filament\Resources\SubjectResource;
 use App\Filament\Resources\TeacherResource;
+use App\Filament\Pages\Tenancy\RegisterTeam;
 use App\Filament\Resources\ClassroomResource;
 use App\Filament\Resources\DepartmentResource;
 use App\Filament\Resources\NewStudentResource;
@@ -78,6 +80,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+            ->tenant(Team::class)
+            ->tenantRegistration(RegisterTeam::class)
             ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
                 return $builder->groups([
                     NavigationGroup::make()
@@ -132,10 +136,10 @@ class AdminPanelProvider extends PanelProvider
     {
         Filament::serving(function () {
             Filament::registerUserMenuItems([
-                UserMenuItem::make()
-                    ->label('Setting')
-                    ->url(PeriodeResource::getUrl())
-                    ->icon('heroicon-s-cog'),
+                // UserMenuItem::make()
+                //     ->label('Setting')
+                //     ->url(PeriodeResource::getUrl())
+                //     ->icon('heroicon-s-cog'),
             ]);
         });
     }
