@@ -14,6 +14,7 @@ use Filament\Navigation\UserMenuItem;
 use Filament\Navigation\NavigationItem;
 use App\Filament\Resources\UserResource;
 use Filament\Navigation\NavigationGroup;
+use App\Filament\Resources\NilaiResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
 use App\Filament\Resources\PeriodeResource;
@@ -99,6 +100,7 @@ class AdminPanelProvider extends PanelProvider
                         ...NewStudentResource::getNavigationItems(),
                         ...StudentHasClassResource::getNavigationItems(),
                         ...SubjectResource::getNavigationItems(),
+                        ...NilaiResource::getNavigationItems(),
                     ]),
                     NavigationGroup::make('Source')
                     ->items([

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Role;
+
 return [
 
     'preload_roles' => true,
