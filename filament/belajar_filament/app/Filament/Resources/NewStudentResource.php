@@ -2,18 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NewStudentResource\Pages;
-use App\Filament\Resources\NewStudentResource\RelationManagers;
-use App\Models\Student;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use stdClass;
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Student;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Enums\ReligionStatus;
 use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\BulkAction;
@@ -23,9 +20,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\NewStudentResource\Pages;
+use App\Filament\Resources\NewStudentResource\RelationManagers;
 
 
 
@@ -61,10 +63,7 @@ class NewStudentResource extends Resource
                         DatePicker::make('birthday')
                             ->label("Birthday"),
                         Select::make('religion')
-                            ->options([
-                                "Hindu" => "Hindu",
-                                "Islam" => "Islam"
-                            ]),
+                            ->options(ReligionStatus::class),
                         TextInput::make('contact'),
                         FileUpload::make('profile')
                             ->directory("students"),
@@ -98,12 +97,11 @@ class NewStudentResource extends Resource
                 TextColumn::make('birthday')
                     ->label("Birthday")
                     ->toggleable(isToggledHiddenByDefault: true), // untuk hide dari tampilan tabel
-                TextColumn::make('religion')
-                    ->label("Religion")
-                    ->toggleable(isToggledHiddenByDefault: true), // untuk hide dari tampilan tabel
                 TextColumn::make('contact')
                     ->label("Contact"),
+                SelectColumn::make('religion')->options(ReligionStatus::class),
                 ImageColumn::make('profile')
+                    ->circular()->extraImgAttributes(['img_preview'])
                     ->label("Profile"),
                 TextColumn::make('status')
                     ->label("Status")
