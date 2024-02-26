@@ -21,6 +21,7 @@ use App\Filament\Resources\PeriodeResource;
 use App\Filament\Resources\SubjectResource;
 use App\Filament\Resources\TeacherResource;
 use App\Filament\Pages\Tenancy\RegisterTeam;
+use App\Filament\Resources\AdjacencyResource;
 use App\Filament\Resources\ClassroomResource;
 use App\Filament\Resources\DepartmentResource;
 use App\Filament\Resources\NewStudentResource;
@@ -93,6 +94,7 @@ class AdminPanelProvider extends PanelProvider
                         ->icon('heroicon-o-home')
                         ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
                         ->url(fn (): string => Dashboard::getUrl()),
+                        ...AdjacencyResource::getNavigationItems(),
                     ]),
                     NavigationGroup::make('Academic')
                     ->items([
