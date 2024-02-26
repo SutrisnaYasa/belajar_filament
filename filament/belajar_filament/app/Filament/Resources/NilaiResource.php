@@ -76,7 +76,7 @@ class NilaiResource extends Resource
             ->columns([
                 TextColumn::make('student.name'),
                 TextColumn::make('subject.name'),
-                TextColumn::make('categiry_nilai.name'),
+                TextColumn::make('category_nilai.name'),
                 TextColumn::make('nilai'),
                 TextColumn::make('periode.name'),
             ])
