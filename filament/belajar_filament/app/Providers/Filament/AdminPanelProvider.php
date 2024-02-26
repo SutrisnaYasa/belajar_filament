@@ -9,6 +9,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use Filament\Facades\Filament;
+use App\Filament\Auth\Register;
 use Filament\Support\Colors\Color;
 use Filament\Navigation\UserMenuItem;
 use Filament\Navigation\NavigationItem;
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration(Register::class)
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
