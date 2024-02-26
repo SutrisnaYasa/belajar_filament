@@ -7,6 +7,8 @@ use Filament\Actions;
 use App\Models\Periode;
 use App\Models\Student;
 use App\Models\Subject;
+use Filament\Forms\Set;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use App\Models\Classroom;
 use App\Models\CategoryNilai;
@@ -33,11 +35,19 @@ class CreateNilai extends CreateRecord
                         Select::make('classrooms')
                             ->options(Classroom::all()->pluck('name', 'id'))
                             ->searchable()
-                            ->label('Class'),
+                            ->label('Class')
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('student', null);
+                                $set('periode', null);
+                            }),
                         Select::make('periode')
                             ->options(Periode::all()->pluck('name', 'id'))
                             ->searchable()
-                            ->label('Periode'),
+                            ->label('Periode')
+                            ->live()
+                            ->preload()
+                            ->afterStateUpdated(fn(Set $set) => $set('student', null)),
                         Select::make('subject_id')
                             ->options(Subject::all()->pluck('name', 'id'))
                             ->searchable()
@@ -49,14 +59,33 @@ class CreateNilai extends CreateRecord
                             ->columnSpan(3),
                     ])->columns(3),
 
-                Repeater::make('nilaistudents')
-                        ->label("Grade")
-                        ->schema([
-                            Select::make('student')
-                                ->options(Student::all()->pluck('name', 'id'))
-                                ->label('Student'),
-                            TextInput::make('nilai')
-                        ])->columns(2)
+                    Repeater::make('nilaistudents')
+                    ->label("Grade")
+                    ->schema(fn (Get $get): array => [
+                        Select::make('student')
+                        ->options(function () use ($get) {
+                            $data = Student::whereIn('id', function ($query)  use ($get) {
+                                $query->select('students_id')
+                                ->from('student_has_classes')
+                                ->where('classrooms_id', $get('classrooms'))
+                                ->where('periode_id', $get('periode'))
+                                ->where('is_open', true)->pluck('students_id');
+                            })
+                            ->pluck('name', 'id');
+                            return $data;
+                        })
+                        ->label('Student'),
+                        TextInput::make('nilai')
+                    ])->columns(2)
+
+                // Repeater::make('nilaistudents')
+                //         ->label("Grade")
+                //         ->schema([
+                //             Select::make('student')
+                //                 ->options(Student::all()->pluck('name', 'id'))
+                //                 ->label('Student'),
+                //             TextInput::make('nilai')
+                //         ])->columns(2)
             ]);
     }
 
